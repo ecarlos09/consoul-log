@@ -1,0 +1,6 @@
+[submodule "all-about-the-journal"]
+	path = all-about-the-journal
+	url = ../all-about-the-journal
+[submodule "journal-server"]
+	path = journal-server
+	url = ../journal-server
