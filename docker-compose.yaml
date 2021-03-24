@@ -1,0 +1,39 @@
+version: '3'
+services:
+  client:
+    image: node: 14.15.5
+    ports: 
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: ./all-about-the-journal
+        target: /code
+    working_dir: /code
+    command: bash -c "npm install && npm run dev"
+  api:
+    image: node: 14.15.5
+    ports:
+      - 3000:3000
+    environment:
+      - DB_CONNECTION=mongodb://journal-admin:journal-pass@db:27017
+      - DB_NAME=jentries
+    volumes:
+      - type: bind
+        source: ./journal-server
+        target: /code
+    working_dir: /code
+    command: bash -c "npm install && npm run dev"
+    depends_on:
+      - db
+  db:
+    image: mongo:latest
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=journal-admin
+      - MONGO_INITDB_DATABASE=jentries
+      - MONGO_INITDB_ROOT_PASSWORD=journal-pass
+      # Need to finish working on this bit ...
+#     volumes:
+#       - "dbdata:/var/lib/mongodb/data"
+#       - "./journal-server/test-data.json:/docker-entrypoint-initdb.d/seed.js:ro"
+# volumes:
+#   dbdata:
